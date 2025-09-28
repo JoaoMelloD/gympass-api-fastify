@@ -182,8 +182,62 @@ Basicamente usando a extensão do prisma, uma maneira eficiênte de criarmos rel
 - Uma das principais vantagens de utilizarmos repositorios é a possibilidade de migrar de ferramentas/bancos da nossa aplicação mais facilmente.
   _SOLID: 5 Princípios_
   - D - Dependencie Inversion Principle
-  Vou inverter a ordem de como a dependencia chega nesse caso de uso. Ao invés do caso de uso instanciar as dependências que ele precisa, eu vou receber essas dependências como parâmetro.
-  Exemplo: Meu caso de uso **depende** do repositório do prisma por exemplo.
-  Com a inversão de dependencias, ele muda a forma como meu caso de uso interage com outro arquivo da aplicação tem acesso as suas dependências.
+    Vou inverter a ordem de como a dependencia chega nesse caso de uso. Ao invés do caso de uso instanciar as dependências que ele precisa, eu vou receber essas dependências como parâmetro.
+    Exemplo: Meu caso de uso **depende** do repositório do prisma por exemplo.
+    Com a inversão de dependencias, ele muda a forma como meu caso de uso interage com outro arquivo da aplicação tem acesso as suas dependências.
 - Cada classe de caso de uso irá ter sempre um método.
-- O princípio da inversão de dependências faz com que o arquivo que precisar do caso de uso, é esse arquivo que deve enviar as dependências para o meu caso de uso. 
+- O princípio da inversão de dependências faz com que o arquivo que precisar do caso de uso, é esse arquivo que deve enviar as dependências para o meu caso de uso.
+
+### Interface do Repositório
+
+- Um ponto que devemos seguir na hora de implementarmos inversão de dependências, é fazer com que nosso _use-case_ ou regra de negócio, não conheça independênte a implementação, do contéudo do nosso prisma user repository. Ele precisa somente saber os métodos que existem, e quais dados ele pode enviar e receber desses métodos.
+
+### Lidando com erros de Use Cases.
+
+- Realizamos uma tratativa de erros dentro do nosso controller para identificarmos o error que determinada ocasião pode ocorrer no nosso caso de uso. Além de ter um erro só para tudo.
+- Criamos uma pasta de errors contendo um arquivo para cada tipo de erro da nossa aplicação.
+- Exemplo: "Error de Usuario com aquele email existente"
+- Basicamente criamos uma classe que extende a classe _Error_ do próprio javascript. com isso criamos um construtor contendo o método super de error, ou seja, usamos todos os atributos e métodos da classe _Error_ Já existente, Com isso definimos uma mensagem, no caso definindo que aquele email ja está sendo usado.
+  Exemplo de como devemos chamar isso dentro do controlador:
+
+```typescript
+if (error instanceof UserAlreadyExistsError) {
+  reply.status(409).send({
+    message: error.message,
+  });
+}
+```
+
+### Handler de erros global
+
+- Se acontecer algum erro dentro de caso de uso que não é um erro conhecido
+- Erros não tratados
+  Quando não for um erro conhecido, ou seja que não cair em nenhuma validação
+  Ou seja, ao invés de utilizarmos apenas:
+
+```javascript
+return reply.status(500).send();
+```
+
+Podemos utilizar apenas um
+
+```javascript
+throw error;
+```
+
+Que o nosso querido fastify da conta de resolver e nos exibir oque deu de errado. Pois ele possui uma tratativa de erro interna dele.
+Porém para formatarmos e deixarmos ainda mais claro as mensagens de error desconhecidas da nossa aplicação, podemos criar um _handler global_ para efetuar esse papél.
+
+### Configurando Vitest
+- É recomendado criar testes no decorrer da criação de regras de negócio da nossa aplicação.
+- QUando estamos trabalhando na regra em si, através dos testes conseguimos ver se estamos cumprindo a tarefa daquele requisito em si.
+- Se podemos usar uma métodologia como TDD 
+- É essencial o uso de testes.
+- Instalar o vitest
+- Criação do arquivo *register.test.ts* 
+### Criação do primeiro teste unitario da aplicação.
+- Teste para testar o requisito funcional de criação de usuario.
+- "Cada requisito da nossa aplicação vai exigir ao menos um teste"
+- Dica, sempre que formos retornar algo no nosso caso de uso, é recomendado retornarmos um objeto para caso precisemos retornar mais coisas futuramente, exemplo paginação.
+- Testes unitarios nunca vão tocar em bancos de dados ou haver dependências ou em camadas externas da nossa aplicação.
+- Vamos usar a principal vantagém de se usar inversão de dependências no nosso projeto na hora da criação de testes.

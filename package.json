@@ -4,7 +4,8 @@
   "description": "- Geolocalização no Back-End   Exemplo: Pessoa só poderá fazer check-in em academias proximas a ela. - Verificação com data   Exemplo: Só pode entrar na academia 20 após o check-in",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest run",
+    "test:wathc": "vitest",
     "dev": "tsx watch src/server.ts",
     "build": "tsup src -d build",
     "start": "node build/server.js"
@@ -24,7 +25,9 @@
     "tsup": "8.5.0",
     "tsx": "4.20.5",
     "typescript": "5.9.2",
-    "typescript-eslint": "8.44.0"
+    "typescript-eslint": "8.44.0",
+    "vite-tsconfig-paths": "5.1.4",
+    "vitest": "3.2.4"
   },
   "dependencies": {
     "@prisma/client": "6.16.2",
