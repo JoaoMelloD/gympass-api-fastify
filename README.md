@@ -241,3 +241,7 @@ Porém para formatarmos e deixarmos ainda mais claro as mensagens de error desco
 - Dica, sempre que formos retornar algo no nosso caso de uso, é recomendado retornarmos um objeto para caso precisemos retornar mais coisas futuramente, exemplo paginação.
 - Testes unitarios nunca vão tocar em bancos de dados ou haver dependências ou em camadas externas da nossa aplicação.
 - Vamos usar a principal vantagém de se usar inversão de dependências no nosso projeto na hora da criação de testes.
+- Quando criamos testes unitarios, geralmente temos muitos testes unitarios, então seria extremamente lento ter o teste unitario ligado ao banco de dados, evitando lentidão e conflitos. Então nosso teste não pode ter ligação com camadas externas. 
+- O ponto é ter testes proprios para o banco, testes de integração e testes end-to-end que vão sim integrar recursos externos
+### In Memory Database
+- Patern que nos possibilita executar testes com a representação do nosso banco de dados em memória ou seja, os dados sendo salvos em variáveis, focando somente em funcionalidades do caso de uso.
